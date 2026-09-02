@@ -12,6 +12,7 @@ import (
 
 	"github.com/manuelzzz/versiongate/internal/config"
 	"github.com/manuelzzz/versiongate/internal/httpserver"
+	"github.com/manuelzzz/versiongate/internal/postgres"
 )
 
 func main() {
@@ -19,6 +20,15 @@ func main() {
 	if err != nil {
 		log.Fatalf("config: %v", err)
 	}
+
+	// Connect (and ping) now, not lazily on the first request: a
+	// misconfigured or unreachable database should fail startup clearly
+	// rather than surface as a mysterious failure on the first request.
+	db, err := postgres.Open(context.Background(), cfg.DatabaseDSN)
+	if err != nil {
+		log.Fatalf("database: %v", err)
+	}
+	defer db.Close()
 
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,

@@ -4,9 +4,13 @@
 package cli
 
 import (
+	"context"
+	"database/sql"
+
 	"github.com/spf13/cobra"
 
 	"github.com/manuelzzz/versiongate/internal/config"
+	"github.com/manuelzzz/versiongate/internal/postgres"
 )
 
 // NewRootCommand builds the versiongate root command with all
@@ -21,6 +25,7 @@ func NewRootCommand() *cobra.Command {
 	}
 
 	root.AddCommand(newVersionCommand())
+	root.AddCommand(newMigrateCommand())
 	// future: root.AddCommand(newBootstrapCommand()), etc.
 
 	return root
@@ -31,4 +36,15 @@ func NewRootCommand() *cobra.Command {
 // means re-deriving config/DB wiring (issue #17's acceptance criterion).
 func loadConfig() (config.Config, error) {
 	return config.Load()
+}
+
+// openDB is the one place every subcommand goes through to connect to
+// Postgres, for the same reason loadConfig exists: a new command should
+// never need to re-derive connection/pool setup.
+func openDB(ctx context.Context) (*sql.DB, error) {
+	cfg, err := loadConfig()
+	if err != nil {
+		return nil, err
+	}
+	return postgres.Open(ctx, cfg.DatabaseDSN)
 }
