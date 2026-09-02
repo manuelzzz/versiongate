@@ -12,7 +12,9 @@ offers in return, and how the interaction behaves under network failure
 and retries — not the transport or wire format. This document does not
 define HTTP endpoint paths, request/response schemas, or database
 structures; it defines the protocol's semantics so those can be designed
-consistently later.
+consistently later. Shared HTTP-level conventions (error shape, status
+codes, authentication header) are centralized in
+`specs/protocols/http.md` rather than duplicated here.
 
 ## Publisher identity
 

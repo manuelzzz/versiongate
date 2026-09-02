@@ -58,7 +58,9 @@ itself.
   client's reported version.
 - The Release is where policy *data* lives; the *evaluation* of a specific
   client request against that data is a separate concern (policy
-  evaluation logic), not part of what defines a Release.
+  evaluation logic), not part of what defines a Release. See
+  `specs/domain/update-policy.md` for how a client's version is resolved
+  against an Application's full Release history.
 
 ## Release lifecycle
 

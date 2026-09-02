@@ -102,6 +102,10 @@ stage.
   Project-scoped tokens for their own CI/CD systems; VersionGate's
   obligation is to make tokens easy to rotate and revoke (below), not to
   prevent operators from mishandling them.
+- How the very first Project and its first token come to exist — before
+  any token is available to authenticate a creation request — is a
+  separate bootstrap problem, resolved in
+  `specs/decisions/bootstrap-mechanism.md`.
 - If a future requirement introduces multiple trust levels among write
   operations (e.g. a human admin vs. an automated pipeline) or per-user
   accountability, that will require a new or extended decision — this
