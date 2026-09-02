@@ -26,7 +26,7 @@ func NewRootCommand() *cobra.Command {
 
 	root.AddCommand(newVersionCommand())
 	root.AddCommand(newMigrateCommand())
-	// future: root.AddCommand(newBootstrapCommand()), etc.
+	root.AddCommand(newBootstrapCommand())
 
 	return root
 }
