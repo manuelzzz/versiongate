@@ -1,7 +1,57 @@
 package main
 
-import "fmt"
+import (
+	"context"
+	"errors"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/manuelzzz/versiongate/internal/config"
+	"github.com/manuelzzz/versiongate/internal/httpserver"
+	"github.com/manuelzzz/versiongate/internal/postgres"
+)
 
 func main() {
-	fmt.Println("Hello, VersionGate!")
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("config: %v", err)
+	}
+
+	// Connect (and ping) now, not lazily on the first request: a
+	// misconfigured or unreachable database should fail startup clearly
+	// rather than surface as a mysterious failure on the first request.
+	db, err := postgres.Open(context.Background(), cfg.DatabaseDSN)
+	if err != nil {
+		log.Fatalf("database: %v", err)
+	}
+	defer db.Close()
+
+	srv := &http.Server{
+		Addr:              cfg.ListenAddr,
+		Handler:           httpserver.New(),
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go func() {
+		log.Printf("listening on %s", cfg.ListenAddr)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Fatalf("server: %v", err)
+		}
+	}()
+
+	<-ctx.Done()
+	log.Println("shutting down")
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("shutdown: %v", err)
+	}
 }
