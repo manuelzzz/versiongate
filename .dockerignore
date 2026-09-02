@@ -1,0 +1,7 @@
+.git
+.github
+.claude
+*.md
+docs/
+specs/
+.rules/
