@@ -12,7 +12,7 @@ import (
 // mapping end-to-end through a full HTTP round trip, per issue #18's
 // acceptance criteria.
 func TestTestEcho(t *testing.T) {
-	srv := httptest.NewServer(New())
+	srv := httptest.NewServer(New(Dependencies{}))
 	defer srv.Close()
 
 	t.Run("valid request echoes name", func(t *testing.T) {

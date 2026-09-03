@@ -30,9 +30,14 @@ func main() {
 	}
 	defer db.Close()
 
+	deps := httpserver.Dependencies{
+		Tokens:       postgres.NewTokenRepository(db),
+		Applications: postgres.NewApplicationRepository(db),
+	}
+
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           httpserver.New(),
+		Handler:           httpserver.New(deps),
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 
