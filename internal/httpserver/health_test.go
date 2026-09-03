@@ -7,7 +7,7 @@ import (
 )
 
 func TestHealth(t *testing.T) {
-	srv := httptest.NewServer(New())
+	srv := httptest.NewServer(New(Dependencies{}))
 	defer srv.Close()
 
 	resp, err := http.Get(srv.URL + "/health")
