@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/manuelzzz/versiongate/internal/application"
+	"github.com/manuelzzz/versiongate/internal/release"
 	"github.com/manuelzzz/versiongate/internal/token"
 )
 
@@ -14,6 +15,7 @@ import (
 type Dependencies struct {
 	Tokens       token.Repository
 	Applications application.Repository
+	Releases     release.Repository
 }
 
 func New(deps Dependencies) http.Handler {
@@ -24,6 +26,8 @@ func New(deps Dependencies) http.Handler {
 	requireToken := RequireToken(deps.Tokens)
 	mux.Handle("POST /applications", requireToken(createApplicationHandler(deps.Applications)))
 	mux.Handle("GET /applications/{id}", requireToken(getApplicationHandler(deps.Applications)))
+	mux.Handle("POST /applications/{applicationID}/releases",
+		requireToken(publishReleaseHandler(deps.Releases, deps.Applications)))
 
 	return mux
 }
