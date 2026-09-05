@@ -82,6 +82,16 @@ func (f *fakeReleaseRepository) GetByVersion(_ context.Context, applicationID ap
 	return r, nil
 }
 
+func (f *fakeReleaseRepository) ListByApplication(_ context.Context, applicationID application.ID) ([]Release, error) {
+	var releases []Release
+	for _, r := range f.byKey {
+		if r.ApplicationID == applicationID {
+			releases = append(releases, r)
+		}
+	}
+	return releases, nil
+}
+
 // fakeApplicationRepository is a minimal in-memory application.Repository
 // sufficient for Publish's needs: Get and Active-state checking.
 type fakeApplicationRepository struct {
@@ -97,6 +107,10 @@ func newFakeApplicationRepository(apps ...application.Application) *fakeApplicat
 }
 
 func (f *fakeApplicationRepository) Create(context.Context, project.ID, string, string, application.Platform) (application.Application, error) {
+	panic("not used by these tests")
+}
+
+func (f *fakeApplicationRepository) GetByIdentifier(context.Context, string) (application.Application, error) {
 	panic("not used by these tests")
 }
 

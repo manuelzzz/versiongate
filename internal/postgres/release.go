@@ -67,7 +67,36 @@ func (r *ReleaseRepository) GetByVersion(ctx context.Context, applicationID appl
 	return rel, nil
 }
 
-func scanRelease(row *sql.Row) (release.Release, error) {
+func (r *ReleaseRepository) ListByApplication(ctx context.Context, applicationID application.ID) ([]release.Release, error) {
+	const query = `
+		SELECT id, application_id, major, minor, patch, build_number, policy, created_at
+		FROM releases
+		WHERE application_id = $1`
+
+	rows, err := r.db.QueryContext(ctx, query, applicationID)
+	if err != nil {
+		return nil, fmt.Errorf("postgres: list releases: %w", err)
+	}
+	defer rows.Close()
+
+	var releases []release.Release
+	for rows.Next() {
+		rel, err := scanRelease(rows)
+		if err != nil {
+			return nil, fmt.Errorf("postgres: list releases: %w", err)
+		}
+		releases = append(releases, rel)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("postgres: list releases: %w", err)
+	}
+	return releases, nil
+}
+
+// scanRelease uses rowScanner (defined in application.go) so it can
+// serve both a single-row QueryRowContext result and a multi-row
+// QueryContext result (see ListByApplication) identically.
+func scanRelease(row rowScanner) (release.Release, error) {
 	var (
 		rel    release.Release
 		v      version.Version

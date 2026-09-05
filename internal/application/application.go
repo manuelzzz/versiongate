@@ -84,6 +84,18 @@ var ErrIdentifierTaken = errors.New("application: identifier already in use for 
 // an owning Project (specs/domain/application.md's Constraints).
 var ErrProjectNotFound = errors.New("application: project not found")
 
+// ErrIdentifierAmbiguous is returned by GetByIdentifier if more than
+// one Application shares identifier across Projects. Identifiers are
+// only guaranteed unique *within* a Project
+// (specs/domain/application.md's Relationship with Project) — two
+// Projects legitimately reusing the same identifier is an accepted
+// scenario for Project-scoped access, but the unauthenticated
+// update-check lookup (specs/protocols/update-check.md) has no Project
+// context to disambiguate with. This is treated as an operator data
+// issue (an internal error), not a client error: a well-behaved
+// deployment should never actually hit it.
+var ErrIdentifierAmbiguous = errors.New("application: identifier is not unique across projects")
+
 // Repository persists and retrieves Applications, scoped to a Project.
 // Infrastructure provides the implementation; this package only
 // declares what it needs from it.
@@ -91,6 +103,13 @@ type Repository interface {
 	Create(ctx context.Context, projectID project.ID, identifier, displayName string, platform Platform) (Application, error)
 	Get(ctx context.Context, projectID project.ID, id ID) (Application, error)
 	Deactivate(ctx context.Context, projectID project.ID, id ID) (Application, error)
+
+	// GetByIdentifier looks up an Application by its public identifier
+	// alone, with no Project scope — used only by the unauthenticated
+	// update-check path (specs/protocols/update-check.md), where a
+	// client has no token and thus no Project context. Every other
+	// caller should use Get, which is Project-scoped.
+	GetByIdentifier(ctx context.Context, identifier string) (Application, error)
 }
 
 // Create validates identifier, displayName, and platform, then

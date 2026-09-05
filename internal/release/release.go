@@ -79,4 +79,11 @@ var ErrApplicationNotFound = errors.New("release: application not found")
 type Repository interface {
 	Create(ctx context.Context, applicationID application.ID, v version.Version, buildNumber int, policy Policy) (Release, error)
 	GetByVersion(ctx context.Context, applicationID application.ID, v version.Version, buildNumber int) (Release, error)
+
+	// ListByApplication returns applicationID's current non-revoked
+	// Releases, for update policy evaluation
+	// (specs/domain/update-policy.md). Revocation doesn't exist yet (see
+	// #28's issue scope), so today this is simply every Release under
+	// the Application; a caller filters once revocation lands.
+	ListByApplication(ctx context.Context, applicationID application.ID) ([]Release, error)
 }
