@@ -85,7 +85,54 @@ func (r *ApplicationRepository) Deactivate(ctx context.Context, projectID projec
 	return a, nil
 }
 
-func scanApplication(row *sql.Row) (application.Application, error) {
+// GetByIdentifier looks up an Application by identifier alone, across
+// all Projects — see application.Repository.GetByIdentifier's doc
+// comment for why, and for ErrIdentifierAmbiguous's meaning. LIMIT 2
+// (rather than 1) is deliberate: it lets this method distinguish "found
+// exactly one" from "found more than one" in a single query.
+func (r *ApplicationRepository) GetByIdentifier(ctx context.Context, identifier string) (application.Application, error) {
+	const query = `
+		SELECT id, project_id, identifier, display_name, platform, active, created_at, updated_at
+		FROM applications
+		WHERE identifier = $1
+		LIMIT 2`
+
+	rows, err := r.db.QueryContext(ctx, query, identifier)
+	if err != nil {
+		return application.Application{}, fmt.Errorf("postgres: get application by identifier: %w", err)
+	}
+	defer rows.Close()
+
+	var matches []application.Application
+	for rows.Next() {
+		a, err := scanApplication(rows)
+		if err != nil {
+			return application.Application{}, fmt.Errorf("postgres: get application by identifier: %w", err)
+		}
+		matches = append(matches, a)
+	}
+	if err := rows.Err(); err != nil {
+		return application.Application{}, fmt.Errorf("postgres: get application by identifier: %w", err)
+	}
+
+	switch len(matches) {
+	case 0:
+		return application.Application{}, application.ErrNotFound
+	case 1:
+		return matches[0], nil
+	default:
+		return application.Application{}, application.ErrIdentifierAmbiguous
+	}
+}
+
+// rowScanner is satisfied by both *sql.Row and *sql.Rows, letting
+// scanApplication serve a single-row QueryRowContext result and a
+// multi-row QueryContext result (see GetByIdentifier) identically.
+type rowScanner interface {
+	Scan(dest ...any) error
+}
+
+func scanApplication(row rowScanner) (application.Application, error) {
 	var (
 		a        application.Application
 		platform string

@@ -54,6 +54,16 @@ func (f *fakeReleaseRepository) GetByVersion(_ context.Context, applicationID ap
 	return r, nil
 }
 
+func (f *fakeReleaseRepository) ListByApplication(_ context.Context, applicationID application.ID) ([]release.Release, error) {
+	var releases []release.Release
+	for _, r := range f.byKey {
+		if r.ApplicationID == applicationID {
+			releases = append(releases, r)
+		}
+	}
+	return releases, nil
+}
+
 func TestPublishRelease(t *testing.T) {
 	newServer := func() (http.Handler, *fakeTokenRepository, *fakeApplicationRepository, *fakeReleaseRepository) {
 		tokens := newFakeTokenRepository()

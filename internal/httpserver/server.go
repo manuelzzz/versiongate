@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/manuelzzz/versiongate/internal/application"
+	"github.com/manuelzzz/versiongate/internal/project"
 	"github.com/manuelzzz/versiongate/internal/release"
 	"github.com/manuelzzz/versiongate/internal/token"
 )
@@ -14,6 +15,7 @@ import (
 // backed — that's cmd/server's job.
 type Dependencies struct {
 	Tokens       token.Repository
+	Projects     project.Repository
 	Applications application.Repository
 	Releases     release.Repository
 }
@@ -22,6 +24,10 @@ func New(deps Dependencies) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", healthHandler)
 	mux.HandleFunc("POST /internal/_test-echo", testEchoHandler)
+
+	// Unauthenticated by design (specs/decisions/authentication.md):
+	// update-check reads are not gated behind RequireToken.
+	mux.HandleFunc("GET /update-check", updateCheckHandler(deps.Applications, deps.Releases, deps.Projects))
 
 	requireToken := RequireToken(deps.Tokens)
 	mux.Handle("POST /applications", requireToken(createApplicationHandler(deps.Applications)))

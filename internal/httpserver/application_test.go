@@ -55,6 +55,23 @@ func (f *fakeApplicationRepository) Get(_ context.Context, projectID project.ID,
 	return a, nil
 }
 
+func (f *fakeApplicationRepository) GetByIdentifier(_ context.Context, identifier string) (application.Application, error) {
+	var matches []application.Application
+	for _, a := range f.byID {
+		if a.Identifier == identifier {
+			matches = append(matches, a)
+		}
+	}
+	switch len(matches) {
+	case 0:
+		return application.Application{}, application.ErrNotFound
+	case 1:
+		return matches[0], nil
+	default:
+		return application.Application{}, application.ErrIdentifierAmbiguous
+	}
+}
+
 func (f *fakeApplicationRepository) Deactivate(_ context.Context, projectID project.ID, id application.ID) (application.Application, error) {
 	a, ok := f.byID[id]
 	if !ok || a.ProjectID != projectID {

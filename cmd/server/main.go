@@ -32,6 +32,7 @@ func main() {
 
 	deps := httpserver.Dependencies{
 		Tokens:       postgres.NewTokenRepository(db),
+		Projects:     postgres.NewProjectRepository(db),
 		Applications: postgres.NewApplicationRepository(db),
 		Releases:     postgres.NewReleaseRepository(db),
 	}
