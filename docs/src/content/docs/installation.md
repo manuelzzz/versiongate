@@ -64,7 +64,9 @@ export VERSIONGATE_DATABASE_DSN="postgres://versiongate:versiongate@localhost:54
 versiongate migrate up
 ```
 
-`versiongate migrate status` shows which migrations have been applied.
+`versiongate migrate status` shows which migrations have been applied —
+see [Managing the database schema](/versiongate/migrations/) for the
+full command reference, including rolling back.
 
 ## 3. Verify
 

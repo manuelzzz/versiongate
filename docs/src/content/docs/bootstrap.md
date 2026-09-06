@@ -82,8 +82,8 @@ Project — see [Publishing Releases](/versiongate/publishing-releases/).
 ## Other CLI commands
 
 ```bash
-versiongate version        # print the CLI/server build version
-versiongate migrate up     # apply pending migrations
-versiongate migrate down   # roll back the most recently applied migration
-versiongate migrate status # show which migrations have been applied
+versiongate version # print the CLI/server build version
 ```
+
+For `versiongate migrate` (applying, rolling back, and inspecting the
+database schema), see [Managing the database schema](/versiongate/migrations/).

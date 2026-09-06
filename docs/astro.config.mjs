@@ -20,9 +20,20 @@ export default defineConfig({
 			},
 			sidebar: [
 				{ label: 'Installation', slug: 'installation' },
-				{ label: 'CLI bootstrap', slug: 'bootstrap' },
-				{ label: 'Publishing Releases', slug: 'publishing-releases' },
-				{ label: 'Update Check', slug: 'update-check' },
+				{
+					label: 'CLI',
+					items: [
+						{ label: 'Bootstrap', slug: 'bootstrap' },
+						{ label: 'Managing the database schema', slug: 'migrations' },
+					],
+				},
+				{
+					label: 'API',
+					items: [
+						{ label: 'Publishing Releases', slug: 'publishing-releases' },
+						{ label: 'Update Check', slug: 'update-check' },
+					],
+				},
 			],
 		}),
 	],
