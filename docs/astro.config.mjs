@@ -42,6 +42,7 @@ export default defineConfig({
 						{ label: 'Update Check', slug: 'update-check' },
 					],
 				},
+				{ label: 'Contribute', slug: 'contribute' },
 			],
 		}),
 	],
