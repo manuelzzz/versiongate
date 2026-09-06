@@ -1,0 +1,44 @@
+---
+title: Overview
+description: A self-hosted, API-first service for managing mobile application releases and evaluating update policies.
+template: splash
+hero:
+  title: VersionGate
+  tagline: A self-hosted, API-first service for managing mobile application releases and evaluating update policies.
+  actions:
+    - text: Installation
+      link: /versiongate/installation/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/manuelzzz/versiongate
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+VersionGate decides, given a client's current version, whether a mobile
+app should continue normally, be notified that an update is available, or
+be required to update before continuing. It does not distribute
+application binaries — only release metadata and update policies.
+
+## Guides
+
+<CardGrid stagger>
+	<Card title="Installation" icon="rocket">
+		Run VersionGate with Docker Compose. See [Installation](/versiongate/installation/).
+	</Card>
+	<Card title="CLI bootstrap" icon="seti:powershell">
+		Create the first Project and API Token. See [CLI bootstrap](/versiongate/bootstrap/).
+	</Card>
+	<Card title="Publishing Releases" icon="up-caret">
+		Publish a Release from CI/CD. See [Publishing Releases](/versiongate/publishing-releases/).
+	</Card>
+	<Card title="Update Check" icon="magnifier">
+		Integrate the update-check endpoint in a mobile client. See [Update Check](/versiongate/update-check/).
+	</Card>
+</CardGrid>
+
+For the concepts and decisions behind VersionGate's design, see
+[`specs/`](https://github.com/manuelzzz/versiongate/tree/main/specs) in the
+repository.
