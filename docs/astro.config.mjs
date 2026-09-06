@@ -18,6 +18,9 @@ export default defineConfig({
 			editLink: {
 				baseUrl: 'https://github.com/manuelzzz/versiongate/edit/main/docs/',
 			},
+			components: {
+				Footer: './src/components/Footer.astro',
+			},
 			sidebar: [
 				{ label: 'Installation', slug: 'installation' },
 				{

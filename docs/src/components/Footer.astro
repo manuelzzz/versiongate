@@ -1,0 +1,54 @@
+---
+// Wraps Starlight's default per-page footer (edit link, last-updated,
+// prev/next) with a persistent site-wide footer bar underneath — a
+// plain per-page footer isn't shown on the homepage's splash template,
+// but a site-wide one should appear on every page.
+import Default from '@astrojs/starlight/components/Footer.astro';
+
+const year = new Date().getFullYear();
+---
+
+<Default><slot /></Default>
+
+<footer class="site-footer">
+	<div class="site-footer-inner">
+		<p>&copy; {year} VersionGate. Released under the <a href="https://github.com/manuelzzz/versiongate/blob/main/LICENSE">MIT License</a>.</p>
+		<nav aria-label="Site">
+			<a href="https://github.com/manuelzzz/versiongate">GitHub</a>
+			<a href="https://github.com/manuelzzz/versiongate/tree/main/specs">Specs</a>
+			<a href="https://github.com/manuelzzz/versiongate/blob/main/CONTRIBUTING.md">Contributing</a>
+		</nav>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		border-top: 1px solid var(--sl-color-hairline);
+		margin-top: 3rem;
+		padding: 1.5rem 0;
+	}
+	.site-footer-inner {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+	.site-footer-inner p {
+		margin: 0;
+	}
+	.site-footer-inner a {
+		color: var(--sl-color-gray-2);
+		text-decoration: none;
+	}
+	.site-footer-inner a:hover {
+		color: var(--sl-color-white);
+		text-decoration: underline;
+	}
+	.site-footer nav {
+		display: flex;
+		gap: 1.25rem;
+	}
+</style>
