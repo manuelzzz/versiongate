@@ -81,6 +81,32 @@ The server has no data yet — no Project, Application, or API Token
 exists. Continue to [CLI bootstrap](/versiongate/bootstrap/) to create the
 first Project and its API Token.
 
+## Uninstall
+
+```bash
+docker compose down
+```
+
+Stops and removes the `server` and `postgres` containers, but **keeps**
+the `postgres-data` volume — your Projects, Applications, Releases, and
+Tokens are preserved for next time.
+
+To also delete all data:
+
+```bash
+docker compose down -v
+```
+
+This removes the `postgres-data` volume along with the containers —
+**irreversible**. There is no backup/export step in this guide; take one
+yourself first if you need to keep the data.
+
+If you installed the CLI with `go install`, remove its binary too:
+
+```bash
+rm "$(go env GOPATH)/bin/versiongate"
+```
+
 ## Configuration reference
 
 The server reads its configuration from environment variables (already
