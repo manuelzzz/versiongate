@@ -1,14 +1,17 @@
-# Integrating update-check in a mobile client
+---
+title: Integrating update-check in a mobile client
+description: Use the unauthenticated update-check endpoint from a mobile client.
+---
 
 `/update-check` is how a mobile client asks VersionGate whether it should
 continue normally, notify the user of an available update, or require an
 update before continuing. It's the read counterpart to
-[`docs/publishing-releases.md`](publishing-releases.md).
+[Publishing Releases](/versiongate/publishing-releases/).
 
 ## No authentication required
 
 This endpoint takes **no** `Authorization` header and needs none — see
-[`specs/decisions/authentication.md`](../specs/decisions/authentication.md).
+[`specs/decisions/authentication.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/decisions/authentication.md).
 The Application identifier it takes is not a secret: it's safe to embed
 directly in your mobile app's source or build configuration. The data
 returned (whether an update is available, and for what version) is
@@ -23,7 +26,7 @@ GET /update-check?application_identifier=acme-ios&version=1.2.0&build_number=180
 
 | Parameter | Required | Meaning |
 |---|---|---|
-| `application_identifier` | yes | The Application's public identifier, set when it was created (see [`docs/publishing-releases.md`](publishing-releases.md)). |
+| `application_identifier` | yes | The Application's public identifier, set when it was created (see [Publishing Releases](/versiongate/publishing-releases/)). |
 | `version` | yes | The client's current version, `MAJOR.MINOR.PATCH`. |
 | `build_number` | no | The client's current build number. Accepted for descriptive symmetry with publishing, but it never affects the outcome — only `version` does. If present, it's still validated (a malformed value is a bad request, not silently ignored). |
 

@@ -1,0 +1,18 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- VersionGate Icon -->
+  <rect x="32" y="32" width="960" height="960" rx="220" fill="#243CC7"/>
+
+  <!-- Outer gate -->
+  <path d="M395 225L205 335C183 348 170 371 170 397V670C170 696 184 720 207 733L395 842"
+        stroke="#FFFFFF" stroke-width="72" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M629 225L819 335C841 348 854 371 854 397V670C854 696 840 720 817 733L629 842"
+        stroke="#FFFFFF" stroke-width="72" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Version layers -->
+  <path d="M370 455L512 375L654 455L512 535L370 455Z"
+        fill="#B9C9F3"/>
+  <path d="M370 555L512 635L654 555"
+        stroke="#B9C9F3" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M370 655L512 735L654 655"
+        stroke="#B9C9F3" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

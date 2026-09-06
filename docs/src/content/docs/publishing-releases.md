@@ -1,9 +1,12 @@
-# Publishing a Release from CI/CD
+---
+title: Publishing a Release from CI/CD
+description: Register an Application and publish Releases for it from a CI/CD pipeline.
+---
 
 This guide covers the write side of VersionGate: registering an
 Application once, then publishing Releases for it from a CI/CD pipeline.
 Both require the Project-scoped API Token from
-[`docs/bootstrap.md`](bootstrap.md).
+[CLI bootstrap](/versiongate/bootstrap/).
 
 All requests below use:
 
@@ -13,14 +16,14 @@ Content-Type: application/json
 ```
 
 Request and response bodies are JSON, with `snake_case` field names, per
-[`specs/protocols/http.md`](../specs/protocols/http.md).
+[`specs/protocols/http.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/protocols/http.md).
 
 ## 1. Create an Application (one-time)
 
 An Application represents one distributable app on one platform — e.g.
 your iOS app and your Android app are two separate Applications, each
 with their own identifier and Release history
-(see [`specs/domain/application.md`](../specs/domain/application.md)).
+(see [`specs/domain/application.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/domain/application.md)).
 Create it once, before publishing any Releases:
 
 ```bash
@@ -50,7 +53,7 @@ curl -X POST http://localhost:8888/applications \
 `platform` must be `ios` or `android`. `identifier` must be unique within
 your Project (not globally) and does not change afterward — it's the
 same value a mobile client will later send to `/update-check`
-(see [`docs/update-check.md`](update-check.md)), so pick something stable
+(see [Update Check](/versiongate/update-check/)), so pick something stable
 before shipping it in a client binary.
 
 A duplicate `identifier` within the same Project returns `409 conflict`.
@@ -80,7 +83,7 @@ curl -X POST "http://localhost:8888/applications/$APPLICATION_ID/releases" \
 ```
 
 - `version` is `MAJOR.MINOR.PATCH` (see
-  [`specs/domain/version.md`](../specs/domain/version.md)).
+  [`specs/domain/version.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/domain/version.md)).
 - `build_number` is a non-negative integer.
 - `policy` is `optional` (notify) or `required` (block until updated).
 
@@ -92,7 +95,7 @@ described.
 ## Idempotency and retries
 
 Publishing is idempotent on (Application, version, build number), per
-[`specs/protocols/release-publishing.md`](../specs/protocols/release-publishing.md).
+[`specs/protocols/release-publishing.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/protocols/release-publishing.md).
 If your pipeline can't tell whether a previous publish request actually
 reached VersionGate (timeout, dropped connection), the safe action is
 always to retry the identical request:
@@ -111,7 +114,7 @@ VersionGate's publish endpoint only accepts a resolved `policy` value —
 it does not read your Git history. If you want to derive that value from
 commit messages instead of setting it manually, your pipeline can
 implement the convention in
-[`specs/protocols/commit-metadata.md`](../specs/protocols/commit-metadata.md):
+[`specs/protocols/commit-metadata.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/protocols/commit-metadata.md):
 tag commits with `[versiongate:update=optional]` or
 `[versiongate:update=required]`, and resolve the most restrictive tag
 across the commit range (`required` wins over `optional`) before calling
@@ -122,7 +125,7 @@ resulting `policy` field.
 ## Error responses
 
 Errors use the shared envelope from
-[`specs/protocols/http.md`](../specs/protocols/http.md):
+[`specs/protocols/http.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/protocols/http.md):
 
 ```json
 { "error": { "code": "validation_error", "message": "..." } }
@@ -137,4 +140,4 @@ Errors use the shared envelope from
 
 An unknown or inactive Application on the publish endpoint specifically
 returns `validation_error`, not `not_found` — see
-[`specs/protocols/release-publishing.md`](../specs/protocols/release-publishing.md).
+[`specs/protocols/release-publishing.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/protocols/release-publishing.md).

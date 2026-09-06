@@ -1,9 +1,12 @@
-# Installation (Docker Compose)
+---
+title: Installation (Docker Compose)
+description: Run a self-hosted VersionGate instance with Docker Compose.
+---
 
 This guide gets a self-hosted VersionGate instance running with Docker
 Compose: one `server` container and one PostgreSQL container, per
-[`specs/decisions/database.md`](../specs/decisions/database.md) (single
-Postgres instance, no replicas or clustering).
+[`specs/decisions/database.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/decisions/database.md)
+(single Postgres instance, no replicas or clustering).
 
 ## Prerequisites
 
@@ -11,7 +14,7 @@ Postgres instance, no replicas or clustering).
 - A Go toolchain, to run the `versiongate` CLI. The CLI isn't built into
   the server image — it's a separate binary you run against the same
   database (see [Applying migrations](#applying-migrations) below and
-  [`docs/bootstrap.md`](bootstrap.md)).
+  [CLI bootstrap](/versiongate/bootstrap/)).
 
 ## 1. Get the source
 
@@ -61,7 +64,9 @@ export VERSIONGATE_DATABASE_DSN="postgres://versiongate:versiongate@localhost:54
 versiongate migrate up
 ```
 
-`versiongate migrate status` shows which migrations have been applied.
+`versiongate migrate status` shows which migrations have been applied —
+see [Managing the database schema](/versiongate/migrations/) for the
+full command reference, including rolling back.
 
 ## 3. Verify
 
@@ -73,8 +78,34 @@ curl http://localhost:8888/health
 ## Next step
 
 The server has no data yet — no Project, Application, or API Token
-exists. Continue to [`docs/bootstrap.md`](bootstrap.md) to create the
+exists. Continue to [CLI bootstrap](/versiongate/bootstrap/) to create the
 first Project and its API Token.
+
+## Uninstall
+
+```bash
+docker compose down
+```
+
+Stops and removes the `server` and `postgres` containers, but **keeps**
+the `postgres-data` volume — your Projects, Applications, Releases, and
+Tokens are preserved for next time.
+
+To also delete all data:
+
+```bash
+docker compose down -v
+```
+
+This removes the `postgres-data` volume along with the containers —
+**irreversible**. There is no backup/export step in this guide; take one
+yourself first if you need to keep the data.
+
+If you installed the CLI with `go install`, remove its binary too:
+
+```bash
+rm "$(go env GOPATH)/bin/versiongate"
+```
 
 ## Configuration reference
 

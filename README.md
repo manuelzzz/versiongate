@@ -1,6 +1,12 @@
+<p align="center">
+  <img src="docs/public/favicon.svg" width="96" height="96" alt="VersionGate logo">
+</p>
+
 # VersionGate
 
 [![CI](https://github.com/manuelzzz/versiongate/actions/workflows/ci.yml/badge.svg)](https://github.com/manuelzzz/versiongate/actions/workflows/ci.yml)
+[![Docs](https://github.com/manuelzzz/versiongate/actions/workflows/docs.yml/badge.svg)](https://github.com/manuelzzz/versiongate/actions/workflows/docs.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A lightweight, self-hosted, API-first service for managing mobile
 application releases and evaluating update policies. Given a client's
@@ -33,22 +39,29 @@ versiongate migrate up
 versiongate bootstrap --name "My Project"
 ```
 
-See [`docs/installation.md`](docs/installation.md) and
-[`docs/bootstrap.md`](docs/bootstrap.md) for the full walkthrough.
+See [Installation](https://manuelzzz.github.io/versiongate/installation/)
+and [CLI bootstrap](https://manuelzzz.github.io/versiongate/bootstrap/)
+for the full walkthrough.
 
 ## Documentation
 
-- [`docs/installation.md`](docs/installation.md) — Docker-based install.
-- [`docs/bootstrap.md`](docs/bootstrap.md) — creating the first Project
-  and API Token with the CLI.
-- [`docs/publishing-releases.md`](docs/publishing-releases.md) —
-  publishing a Release from CI/CD.
-- [`docs/update-check.md`](docs/update-check.md) — integrating the
-  update-check endpoint in a mobile client.
+Full docs: <https://manuelzzz.github.io/versiongate/> (source under
+[`docs/`](docs/), built with Astro + Starlight per
+[`specs/decisions/docs-site.md`](specs/decisions/docs-site.md)).
 
-## Contributing
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md).
+- [Installation](https://manuelzzz.github.io/versiongate/installation/)
+  — Docker-based install, and how to uninstall.
+- [CLI bootstrap](https://manuelzzz.github.io/versiongate/bootstrap/) —
+  creating the first Project and API Token with the CLI.
+- [Managing the database schema](https://manuelzzz.github.io/versiongate/migrations/)
+  — applying, rolling back, and inspecting migrations.
+- [Publishing Releases](https://manuelzzz.github.io/versiongate/publishing-releases/)
+  — publishing a Release from CI/CD.
+- [Update Check](https://manuelzzz.github.io/versiongate/update-check/)
+  — integrating the update-check endpoint in a mobile client.
+- [Contribute](https://manuelzzz.github.io/versiongate/contribute/) —
+  building, testing, and contributing (see also
+  [`CONTRIBUTING.md`](CONTRIBUTING.md), the canonical version).
 
 ## Project knowledge
 
