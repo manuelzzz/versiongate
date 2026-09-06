@@ -10,6 +10,10 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'VersionGate',
+			logo: {
+				src: './src/assets/logo.svg',
+				alt: 'VersionGate',
+			},
 			description:
 				'A self-hosted, API-first service for managing mobile application releases and evaluating update policies.',
 			social: [
@@ -18,6 +22,7 @@ export default defineConfig({
 			editLink: {
 				baseUrl: 'https://github.com/manuelzzz/versiongate/edit/main/docs/',
 			},
+			customCss: ['./src/styles/theme.css'],
 			components: {
 				Footer: './src/components/Footer.astro',
 			},

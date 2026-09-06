@@ -1,0 +1,19 @@
+/*
+ * VersionGate brand accent, derived from the logo's fill color
+ * (#243CC7 ≈ hsl(231, 69%, 46%)). Same structure as Starlight's default
+ * theme (docs/node_modules/@astrojs/starlight/dist/style/props.css):
+ * three shades per mode, with light/dark swapping which shade serves as
+ * the "on-page-background" tint.
+ */
+:root {
+	/* Dark mode */
+	--sl-color-accent-low: hsl(231, 54%, 20%);
+	--sl-color-accent: hsl(231, 90%, 62%);
+	--sl-color-accent-high: hsl(231, 100%, 85%);
+}
+
+:root[data-theme='light'] {
+	--sl-color-accent-high: hsl(231, 70%, 28%);
+	--sl-color-accent: hsl(231, 69%, 46%); /* #243CC7 */
+	--sl-color-accent-low: hsl(231, 70%, 92%);
+}
