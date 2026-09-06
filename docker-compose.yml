@@ -11,6 +11,11 @@ services:
       POSTGRES_DB: versiongate
       POSTGRES_USER: versiongate
       POSTGRES_PASSWORD: versiongate
+    # Exposed on the host so the versiongate CLI (not part of this
+    # compose stack — see docs/installation.md) can run migrations and
+    # bootstrap against this database from outside the container network.
+    ports:
+      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
