@@ -1,9 +1,12 @@
-# Installation (Docker Compose)
+---
+title: Installation (Docker Compose)
+description: Run a self-hosted VersionGate instance with Docker Compose.
+---
 
 This guide gets a self-hosted VersionGate instance running with Docker
 Compose: one `server` container and one PostgreSQL container, per
-[`specs/decisions/database.md`](../specs/decisions/database.md) (single
-Postgres instance, no replicas or clustering).
+[`specs/decisions/database.md`](https://github.com/manuelzzz/versiongate/blob/main/specs/decisions/database.md)
+(single Postgres instance, no replicas or clustering).
 
 ## Prerequisites
 
@@ -11,7 +14,7 @@ Postgres instance, no replicas or clustering).
 - A Go toolchain, to run the `versiongate` CLI. The CLI isn't built into
   the server image — it's a separate binary you run against the same
   database (see [Applying migrations](#applying-migrations) below and
-  [`docs/bootstrap.md`](bootstrap.md)).
+  [CLI bootstrap](/versiongate/bootstrap/)).
 
 ## 1. Get the source
 
@@ -73,7 +76,7 @@ curl http://localhost:8888/health
 ## Next step
 
 The server has no data yet — no Project, Application, or API Token
-exists. Continue to [`docs/bootstrap.md`](bootstrap.md) to create the
+exists. Continue to [CLI bootstrap](/versiongate/bootstrap/) to create the
 first Project and its API Token.
 
 ## Configuration reference
