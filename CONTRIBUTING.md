@@ -23,7 +23,7 @@ specs → decision → implementation workflow this repository follows.
 
 Requires Go (see `go.mod` for the version) and, for anything touching
 Postgres, a running PostgreSQL instance (`docker compose up postgres`
-starts one — see [`docs/installation.md`](docs/installation.md)).
+starts one — see [Installation](https://manuelzzz.github.io/versiongate/installation/)).
 
 ```bash
 go build ./...
@@ -47,6 +47,18 @@ export VERSIONGATE_DATABASE_DSN="postgres://versiongate:versiongate@localhost:54
 go run ./cmd/versiongate migrate up
 go run ./cmd/versiongate bootstrap --name "Dev"
 go run ./cmd/server
+```
+
+### Running the docs site locally
+
+`docs/` is a separate Astro + Starlight (Node.js) project — see
+[`specs/decisions/docs-site.md`](specs/decisions/docs-site.md). It has no
+effect on the Go build or `go test ./...`.
+
+```bash
+cd docs
+npm install
+npm run dev   # http://localhost:4321
 ```
 
 ## Coding conventions
@@ -77,5 +89,5 @@ and a `gofmt` check.
 
 If a change affects user-facing behavior (the API, configuration,
 deployment, or anything a consumer of VersionGate would notice), update
-the relevant page(s) in `docs/` as part of the same change, per
-`AGENTS.md`.
+the relevant page(s) under `docs/src/content/docs/` as part of the same
+change, per `AGENTS.md`.
